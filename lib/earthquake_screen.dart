@@ -46,35 +46,41 @@ class _EarthquakeScreenState extends State<EarthquakeScreen> {
       appBar: AppBar(
         title: Text('Quake Report'),
       ),
-      body: ListView.builder(
-        itemCount: earthquakes == null ? 0 : earthquakes.length,
-        itemBuilder: (_, index) {
-          Map properties = earthquakes[index]['properties'];
-          var magnitude = properties['mag'].toDouble();
-          var place = properties['place'];
-          var time = properties['time'];
-          var quakeUrl = properties['url'];
-
-          return Container(
-            padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
-            child: Card(
-              color: Colors.teal[100],
-              child: Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: Column(
-                  children: <Widget>[
-                    Text(place),
-                    Text(magnitude.toString()),
-                    Text(DateFormat.yMMMd()
-                        .format(DateTime.fromMillisecondsSinceEpoch(time))),
-                    Text(quakeUrl),
-                  ],
-                ),
+      body: earthquakes == null
+          ? Container(
+              child: Center(
+                child: CircularProgressIndicator(),
               ),
+            )
+          : ListView.builder(
+              itemCount: earthquakes == null ? 0 : earthquakes.length,
+              itemBuilder: (_, index) {
+                Map properties = earthquakes[index]['properties'];
+                var magnitude = properties['mag'].toDouble();
+                var place = properties['place'];
+                var time = properties['time'];
+                var quakeUrl = properties['url'];
+
+                return Container(
+                  padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
+                  child: Card(
+                    color: Colors.teal[100],
+                    child: Padding(
+                      padding: const EdgeInsets.all(20.0),
+                      child: Column(
+                        children: <Widget>[
+                          Text(place),
+                          Text(magnitude.toString()),
+                          Text(DateFormat.yMMMd().format(
+                              DateTime.fromMillisecondsSinceEpoch(time))),
+                          Text(quakeUrl),
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+              },
             ),
-          );
-        },
-      ),
     );
   }
 }
