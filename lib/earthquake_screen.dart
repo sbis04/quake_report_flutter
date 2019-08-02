@@ -65,86 +65,51 @@ class _EarthquakeScreenState extends State<EarthquakeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text('Quake Report'),
-        ),
-        body: FutureBuilder(
-          future: getJson(),
-          builder: (context, snapshot) {
-            if (snapshot.data == null) {
+      appBar: AppBar(
+        title: Text('Quake Report'),
+      ),
+      body: FutureBuilder(
+        future: getJson(),
+        builder: (context, snapshot) {
+          if (snapshot.data == null) {
+            return Container(
+              child: Center(
+                child: CircularProgressIndicator(),
+              ),
+            );
+          }
+
+          return ListView.builder(
+            itemCount: snapshot.hasData ? snapshot.data.length : 0,
+            itemBuilder: (_, index) {
+              Map properties = snapshot.data[index]['properties'];
+              var magnitude = properties['mag'].toDouble();
+              var place = properties['place'];
+              var time = properties['time'];
+              var quakeUrl = properties['url'];
+
               return Container(
-                child: Center(
-                  child: CircularProgressIndicator(),
-                ),
-              );
-            }
-
-            return ListView.builder(
-              itemCount: snapshot.hasData ? snapshot.data.length : 0,
-              itemBuilder: (_, index) {
-                Map properties = snapshot.data[index]['properties'];
-                var magnitude = properties['mag'].toDouble();
-                var place = properties['place'];
-                var time = properties['time'];
-                var quakeUrl = properties['url'];
-
-                return Container(
-                  padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
-                  child: Card(
-                    color: Colors.teal[100],
-                    child: Padding(
-                      padding: const EdgeInsets.all(20.0),
-                      child: Column(
-                        children: <Widget>[
-                          Text(place),
-                          Text(magnitude.toString()),
-                          Text(DateFormat.yMMMd().format(
-                              DateTime.fromMillisecondsSinceEpoch(time))),
-                          Text(quakeUrl),
-                        ],
-                      ),
+                padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
+                child: Card(
+                  color: Colors.teal[100],
+                  child: Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: Column(
+                      children: <Widget>[
+                        Text(place),
+                        Text(magnitude.toString()),
+                        Text(DateFormat.yMMMd()
+                            .format(DateTime.fromMillisecondsSinceEpoch(time))),
+                        Text(quakeUrl),
+                      ],
                     ),
                   ),
-                );
-              },
-            );
-          },
-        )
-        // earthquakes == null
-        //     ? Container(
-        //         child: Center(
-        //           child: CircularProgressIndicator(),
-        //         ),
-        //       )
-        //     : ListView.builder(
-        //         itemCount: earthquakes == null ? 0 : earthquakes.length,
-        //         itemBuilder: (_, index) {
-        //           Map properties = earthquakes[index]['properties'];
-        //           var magnitude = properties['mag'].toDouble();
-        //           var place = properties['place'];
-        //           var time = properties['time'];
-        //           var quakeUrl = properties['url'];
-
-        //           return Container(
-        //             padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
-        //             child: Card(
-        //               color: Colors.teal[100],
-        //               child: Padding(
-        //                 padding: const EdgeInsets.all(20.0),
-        //                 child: Column(
-        //                   children: <Widget>[
-        //                     Text(place),
-        //                     Text(magnitude.toString()),
-        //                     Text(DateFormat.yMMMd().format(
-        //                         DateTime.fromMillisecondsSinceEpoch(time))),
-        //                     Text(quakeUrl),
-        //                   ],
-        //                 ),
-        //               ),
-        //             ),
-        //           );
-        //         },
-        //       ),
-        );
+                ),
+              );
+            },
+          );
+        },
+      ),
+    );
   }
 }
