@@ -1,6 +1,6 @@
-# quake_report
+# Quake Report
 
-A new Flutter project.
+This app uses USGS Earthquake API to get the earthquake data from around the world in one place.
 
 ## Getting Started
 
