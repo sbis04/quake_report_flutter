@@ -1,6 +1,6 @@
 # Quake Report
 
-This app uses USGS Earthquake API to get the earthquake data from around the world in one place.
+This app uses USGS Earthquake API to get the earthquake data from around the world in one place
 
 ## Getting Started
 
