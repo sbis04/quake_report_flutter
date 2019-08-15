@@ -32,14 +32,20 @@ class EarthquakeScreen extends StatefulWidget {
 }
 
 class _EarthquakeScreenState extends State<EarthquakeScreen> {
+  static int noOfEarthquakes = 10;
   final String url =
-      'https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&eventtype=earthquake&orderby=time&minmag=4&limit=20';
+      'https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&eventtype=earthquake&orderby=time&minmag=1&limit=$noOfEarthquakes';
 
   // List earthquakes;
+
+  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
+      GlobalKey<RefreshIndicatorState>();
 
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance
+        .addPostFrameCallback((_) => _refreshIndicatorKey.currentState.mounted);
     this.getJson();
   }
 
@@ -63,68 +69,85 @@ class _EarthquakeScreenState extends State<EarthquakeScreen> {
     return earthquakes;
   }
 
+  Future<List> _refresh() {
+    return getJson();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Quake Report'),
         backgroundColor: Color(0xFF3d5e80),
+        actions: <Widget>[
+          IconButton(
+            icon: const Icon(Icons.refresh),
+            tooltip: "Refresh",
+            onPressed: () {
+              _refreshIndicatorKey.currentState.show();
+            },
+          )
+        ],
       ),
-      body: FutureBuilder(
-        future: getJson(),
-        builder: (context, snapshot) {
-          if (snapshot.data == null) {
-            return Container(
-              child: Center(
-                child: CircularProgressIndicator(),
-              ),
-            );
-          }
-
-          return ListView.builder(
-            physics: BouncingScrollPhysics(),
-            itemCount: snapshot.hasData ? snapshot.data.length - 1: 0,
-            itemBuilder: (_, index) {
-              Map properties = snapshot.data[index]['properties'];
-
-              var magnitude = properties['mag'].toDouble().toString();
-
-              String place = properties['place'];
-
-              var time = properties['time'];
-              var quakeUrl = properties['url'];
-
-              var formattedTime = DateFormat.yMMMd().format(
-                DateTime.fromMillisecondsSinceEpoch(time),
-              );
-
+      body: RefreshIndicator(
+        key: _refreshIndicatorKey,
+        onRefresh: _refresh,
+        child: FutureBuilder(
+          future: getJson(),
+          builder: (context, snapshot) {
+            if (snapshot.data == null) {
               return Container(
-                padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
-                child: Card(
-                  elevation: 8,
-                  color: Color(0x983d5e80),
-                  child: Padding(
-                    padding: const EdgeInsets.all(20.0),
-                    child: CardData(
-                      magnitude: magnitude,
-                      place: place,
-                      time: formattedTime,
-                    ),
-                    // Column(
-                    //   children: <Widget>[
-                    //     Text(place),
-                    //     Text(magnitude.toString()),
-                    //     Text(DateFormat.yMMMd()
-                    //         .format(DateTime.fromMillisecondsSinceEpoch(time))),
-                    //     Text(quakeUrl),
-                    //   ],
-                    // ),
-                  ),
+                child: Center(
+                  child: CircularProgressIndicator(),
                 ),
               );
-            },
-          );
-        },
+            }
+
+            return ListView.builder(
+              physics: BouncingScrollPhysics(),
+              itemCount: snapshot.hasData ? noOfEarthquakes : 0,
+              itemBuilder: (_, index) {
+                Map properties = snapshot.data[index]['properties'];
+
+                var magnitude = properties['mag'].toDouble().toString();
+
+                String place = properties['place'];
+
+                var time = properties['time'];
+                var quakeUrl = properties['url'];
+
+                var formattedTime = DateFormat.yMMMd().format(
+                  DateTime.fromMillisecondsSinceEpoch(time),
+                );
+
+                return Container(
+                  padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
+                  child: Card(
+                    elevation: 8,
+                    color: Color(0x983d5e80),
+                    child: Padding(
+                      padding: const EdgeInsets.all(20.0),
+                      child: CardData(
+                        magnitude: magnitude,
+                        place: place,
+                        time: formattedTime,
+                      ),
+                      // Column(
+                      //   children: <Widget>[
+                      //     Text(place),
+                      //     Text(magnitude.toString()),
+                      //     Text(DateFormat.yMMMd()
+                      //         .format(DateTime.fromMillisecondsSinceEpoch(time))),
+                      //     Text(quakeUrl),
+                      //   ],
+                      // ),
+                    ),
+                  ),
+                );
+              },
+            );
+          },
+        ),
       ),
     );
   }
