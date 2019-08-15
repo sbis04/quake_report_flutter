@@ -8,7 +8,7 @@ class CardData extends StatelessWidget {
   CardData(
       {@required this.magnitude, @required this.place, @required this.time});
 
-  String splitPosition = 'of ';
+  final String splitPosition = 'of ';
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +35,7 @@ class CardData extends StatelessWidget {
                 Text(
                   (placeDistance + splitPosition).toUpperCase(),
                   style: TextStyle(
-                    color: Colors.white,
+                    color: Colors.white60,
                   ),
                 ),
                 SizedBox(height: 5),
