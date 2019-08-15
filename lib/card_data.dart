@@ -8,9 +8,11 @@ class CardData extends StatelessWidget {
   CardData(
       {@required this.magnitude, @required this.place, @required this.time});
 
+  String splitPosition = 'of ';
+
   @override
   Widget build(BuildContext context) {
-    List subString = place.split('of ');
+    List subString = place.split(splitPosition);
     String placeDistance = subString[0];
     String placeName = subString[1];
     return Row(
@@ -31,11 +33,12 @@ class CardData extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Text(
-                  placeDistance.toUpperCase(),
+                  (placeDistance + splitPosition).toUpperCase(),
                   style: TextStyle(
                     color: Colors.white,
                   ),
                 ),
+                SizedBox(height: 5),
                 Text(
                   placeName,
                   style: TextStyle(
