@@ -3,23 +3,23 @@ import 'package:flutter/material.dart';
 class CardData extends StatelessWidget {
   final String magnitude;
   final String place;
-  final String time;
+  final String date;
 
   CardData(
-      {@required this.magnitude, @required this.place, @required this.time});
+      {@required this.magnitude, @required this.place, @required this.date});
 
   final String splitPosition = 'of ';
-  String placeDistance;
-  String placeName;
 
   @override
   Widget build(BuildContext context) {
+    String placeDistance;
+    String placeName;
+    
     if (place.contains(splitPosition)) {
       List subString = place.split(splitPosition);
       placeDistance = subString[0];
       placeName = subString[1];
-    }
-    else {
+    } else {
       placeDistance = 'NEAR ';
       placeName = place;
     }
@@ -61,7 +61,7 @@ class CardData extends StatelessWidget {
         Column(
           children: <Widget>[
             Text(
-              time,
+              date,
               style: TextStyle(
                 color: Colors.white,
               ),

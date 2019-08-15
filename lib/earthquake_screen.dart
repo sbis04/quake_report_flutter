@@ -113,7 +113,7 @@ class _EarthquakeScreenState extends State<EarthquakeScreen> {
                 var time = properties['time'];
                 // var quakeUrl = properties['url'];
 
-                var formattedTime = DateFormat.yMMMd().format(
+                var formattedDate = DateFormat.yMMMd().format(
                   DateTime.fromMillisecondsSinceEpoch(time),
                 );
 
@@ -127,17 +127,8 @@ class _EarthquakeScreenState extends State<EarthquakeScreen> {
                       child: CardData(
                         magnitude: magnitude,
                         place: place,
-                        time: formattedTime,
+                        date: formattedDate,
                       ),
-                      // Column(
-                      //   children: <Widget>[
-                      //     Text(place),
-                      //     Text(magnitude.toString()),
-                      //     Text(DateFormat.yMMMd()
-                      //         .format(DateTime.fromMillisecondsSinceEpoch(time))),
-                      //     Text(quakeUrl),
-                      //   ],
-                      // ),
                     ),
                   ),
                 );
