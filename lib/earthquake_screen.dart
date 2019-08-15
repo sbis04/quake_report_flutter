@@ -24,6 +24,7 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
+import 'package:quake_report/card_data.dart';
 
 class EarthquakeScreen extends StatefulWidget {
   @override
@@ -32,7 +33,7 @@ class EarthquakeScreen extends StatefulWidget {
 
 class _EarthquakeScreenState extends State<EarthquakeScreen> {
   final String url =
-      'https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&eventtype=earthquake&orderby=time&minmag=6&limit=20';
+      'https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&eventtype=earthquake&orderby=time&minmag=4&limit=20';
 
   // List earthquakes;
 
@@ -67,6 +68,7 @@ class _EarthquakeScreenState extends State<EarthquakeScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Quake Report'),
+        backgroundColor: Color(0xFF3d5e80),
       ),
       body: FutureBuilder(
         future: getJson(),
@@ -80,29 +82,43 @@ class _EarthquakeScreenState extends State<EarthquakeScreen> {
           }
 
           return ListView.builder(
-            itemCount: snapshot.hasData ? snapshot.data.length : 0,
+            physics: BouncingScrollPhysics(),
+            itemCount: snapshot.hasData ? snapshot.data.length - 1: 0,
             itemBuilder: (_, index) {
               Map properties = snapshot.data[index]['properties'];
-              var magnitude = properties['mag'].toDouble();
-              var place = properties['place'];
+
+              var magnitude = properties['mag'].toDouble().toString();
+
+              String place = properties['place'];
+
               var time = properties['time'];
               var quakeUrl = properties['url'];
+
+              var formattedTime = DateFormat.yMMMd().format(
+                DateTime.fromMillisecondsSinceEpoch(time),
+              );
 
               return Container(
                 padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
                 child: Card(
-                  color: Colors.teal[100],
+                  elevation: 8,
+                  color: Color(0x983d5e80),
                   child: Padding(
                     padding: const EdgeInsets.all(20.0),
-                    child: Column(
-                      children: <Widget>[
-                        Text(place),
-                        Text(magnitude.toString()),
-                        Text(DateFormat.yMMMd()
-                            .format(DateTime.fromMillisecondsSinceEpoch(time))),
-                        Text(quakeUrl),
-                      ],
+                    child: CardData(
+                      magnitude: magnitude,
+                      place: place,
+                      time: formattedTime,
                     ),
+                    // Column(
+                    //   children: <Widget>[
+                    //     Text(place),
+                    //     Text(magnitude.toString()),
+                    //     Text(DateFormat.yMMMd()
+                    //         .format(DateTime.fromMillisecondsSinceEpoch(time))),
+                    //     Text(quakeUrl),
+                    //   ],
+                    // ),
                   ),
                 ),
               );
