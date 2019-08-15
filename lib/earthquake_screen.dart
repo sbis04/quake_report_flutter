@@ -32,9 +32,8 @@ class EarthquakeScreen extends StatefulWidget {
 }
 
 class _EarthquakeScreenState extends State<EarthquakeScreen> {
-  static int noOfEarthquakes = 10;
   final String url =
-      'https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&eventtype=earthquake&orderby=time&minmag=1&limit=$noOfEarthquakes';
+      'https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&eventtype=earthquake&orderby=time&minmag=5&limit=100';
 
   // List earthquakes;
 
@@ -58,8 +57,6 @@ class _EarthquakeScreenState extends State<EarthquakeScreen> {
     );
 
     if (response.statusCode == 200) {
-      print(response.body);
-
       setState(() {
         var convertDataToJson = jsonDecode(response.body);
         earthquakes = convertDataToJson['features'];
@@ -105,8 +102,8 @@ class _EarthquakeScreenState extends State<EarthquakeScreen> {
 
             return ListView.builder(
               physics: BouncingScrollPhysics(),
-              itemCount: snapshot.hasData ? noOfEarthquakes : 0,
-              itemBuilder: (_, index) {
+              itemCount: snapshot.hasData ? snapshot.data.length : 0,
+              itemBuilder: (BuildContext context, int index) {
                 Map properties = snapshot.data[index]['properties'];
 
                 var magnitude = properties['mag'].toDouble().toString();
@@ -114,7 +111,7 @@ class _EarthquakeScreenState extends State<EarthquakeScreen> {
                 String place = properties['place'];
 
                 var time = properties['time'];
-                var quakeUrl = properties['url'];
+                // var quakeUrl = properties['url'];
 
                 var formattedTime = DateFormat.yMMMd().format(
                   DateTime.fromMillisecondsSinceEpoch(time),

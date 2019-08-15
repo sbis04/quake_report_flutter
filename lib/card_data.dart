@@ -9,12 +9,21 @@ class CardData extends StatelessWidget {
       {@required this.magnitude, @required this.place, @required this.time});
 
   final String splitPosition = 'of ';
+  String placeDistance;
+  String placeName;
 
   @override
   Widget build(BuildContext context) {
-    List subString = place.split(splitPosition);
-    String placeDistance = subString[0];
-    String placeName = subString[1];
+    if (place.contains(splitPosition)) {
+      List subString = place.split(splitPosition);
+      placeDistance = subString[0];
+      placeName = subString[1];
+    }
+    else {
+      placeDistance = 'NEAR ';
+      placeName = place;
+    }
+
     return Row(
       children: <Widget>[
         CircleAvatar(
