@@ -24,22 +24,27 @@ class CardData extends StatelessWidget {
             ),
           ),
         ),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Text(
-              placeDistance.toUpperCase(),
-              style: TextStyle(
-                color: Colors.white,
-              ),
+        Expanded(
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(10, 5, 0, 5),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(
+                  placeDistance.toUpperCase(),
+                  style: TextStyle(
+                    color: Colors.white,
+                  ),
+                ),
+                Text(
+                  placeName,
+                  style: TextStyle(
+                    color: Colors.white,
+                  ),
+                ),
+              ],
             ),
-            Text(
-              placeName,
-              style: TextStyle(
-                color: Colors.white,
-              ),
-            ),
-          ],
+          ),
         ),
         Column(
           children: <Widget>[
