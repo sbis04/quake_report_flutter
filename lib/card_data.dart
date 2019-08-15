@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class CardData extends StatelessWidget {
-  final String magnitude;
+  final double magnitude;
   final String place;
   final String date;
 
@@ -14,7 +14,18 @@ class CardData extends StatelessWidget {
   Widget build(BuildContext context) {
     String placeDistance;
     String placeName;
-    
+
+    List<Color> magnitudeColor = [
+      Color(0xFF04B4B3),
+      Color(0xFF10CAC9),
+      Color(0xFFF5A623),
+      Color(0xFFFF7D50),
+      Color(0xFFFC6644),
+      Color(0xFFE75F40),
+      Color(0xFFE13A20),
+      Color(0xFFD93218),
+    ];
+
     if (place.contains(splitPosition)) {
       List subString = place.split(splitPosition);
       placeDistance = subString[0];
@@ -27,9 +38,9 @@ class CardData extends StatelessWidget {
     return Row(
       children: <Widget>[
         CircleAvatar(
-          backgroundColor: Colors.red,
+          backgroundColor: magnitudeColor[magnitude.toInt()],
           child: Text(
-            magnitude,
+            magnitude.toStringAsFixed(1),
             style: TextStyle(
               color: Colors.white,
             ),

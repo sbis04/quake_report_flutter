@@ -106,7 +106,7 @@ class _EarthquakeScreenState extends State<EarthquakeScreen> {
               itemBuilder: (BuildContext context, int index) {
                 Map properties = snapshot.data[index]['properties'];
 
-                var magnitude = properties['mag'].toDouble().toString();
+                double magnitude = properties['mag'].toDouble();
 
                 String place = properties['place'];
 
